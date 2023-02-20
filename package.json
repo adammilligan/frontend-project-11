@@ -12,8 +12,13 @@
   },
   "author": "Vadim Valygin",
   "license": "ISC",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/adammilligan/frontend-project-11/issues"
   },
-  "homepage": "https://github.com/adammilligan/frontend-project-11#readme"
+  "homepage": "https://github.com/adammilligan/frontend-project-11#readme",
+  "devDependencies": {
+    "eslint": "^8.31.0",
+    "eslint-config-airbnb-base": "^15.0.0"
+  }
 }

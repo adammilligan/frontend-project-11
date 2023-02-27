@@ -28,7 +28,6 @@ export default () => {
     },
     listOfFeeds: [],
   };
-
   const watchedState = onChange(state, render(state, elements));
 
   elements.form.addEventListener('input', (e) => {

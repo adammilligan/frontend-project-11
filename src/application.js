@@ -57,6 +57,29 @@ const addPosts = (feedId, posts, watchedState) => {
   watchedState.posts = result.concat(watchedState.posts);
 };
 
+const postsUpdate = (url, feedId, watchedState) => {
+  const timeout = 5000;
+  const inner = () => {
+    getAxiosResponse(url)
+      .then((response) => parseRSS(response.data.contents))
+      .then((parsedRSS) => {
+        const postsUrls = watchedState.posts
+          .filter((post) => feedId === post.feedId)
+          .map(({ link }) => link);
+        const newPosts = parsedRSS.posts.filter(({ link }) => !postsUrls.includes(link));
+        if (newPosts.length > 0) {
+          addPosts(feedId, newPosts, watchedState);
+        }
+      })
+      .catch(console.error)
+      .finally(() => {
+        setTimeout(inner, timeout);
+      });
+  };
+
+  setTimeout(inner, timeout);
+};
+
 export default () => {
   const defaultLanguage = 'ru';
   const i18nInstance = i18next.createInstance();
@@ -76,6 +99,7 @@ export default () => {
         listOfFeeds: [],
         feeds: [],
         posts: [],
+        readPostIds: new Set(),
       };
 
       const watchedState = onChange(state, render(state, elements, i18nInstance));
@@ -101,7 +125,7 @@ export default () => {
             addFeeds(feedId, title, description, watchedState);
             addPosts(feedId, parsedRSS.posts, watchedState);
 
-            // console.log(state.feeds, state.posts);
+            postsUpdate(state.data, feedId, watchedState);
 
             watchedState.listOfFeeds.push(state.data);
             watchedState.processState = 'finished';
@@ -114,6 +138,12 @@ export default () => {
           .finally(() => {
             watchedState.processState = 'filling';
           });
+      });
+      elements.posts.addEventListener('click', (e) => {
+        const postId = e.target.dataset.id;
+        if (postId) {
+          watchedState.readPostIds.add(+postId);
+        }
       });
     });
 };

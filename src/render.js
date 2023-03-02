@@ -36,7 +36,7 @@ const makeContainer = (title, state, elements, i18nInstance) => {
       const listGroupItem = document.createElement('li');
       listGroupItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
       const a = document.createElement('a');
-      a.classList.add('fw-bold');
+      a.classList.add(state.readPostIds.has(post.id) ? ('fw-normal', 'link-secondary') : 'fw-bold');
       a.href = post.link;
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
@@ -98,7 +98,16 @@ export default (state, elements, i18nInstance) => (path, value) => {
         finishHandler(state, elements, i18nInstance);
       }
       break;
-
+      if (value === 'filling') {
+        elements.btn.disabled = false;
+      }
+      break;
+    case 'readPostIds':
+      makeContainer('posts', state, elements, i18nInstance);
+      break;
+    case 'posts':
+      makeContainer('posts', state, elements, i18nInstance);
+      break;
     default:
       break;
   }

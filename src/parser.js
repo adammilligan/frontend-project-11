@@ -1,21 +1,30 @@
-export default (data) => {
-  const parser = new DOMParser();
-  const dom = parser.parseFromString(data, 'application/xml');
-  const parseError = dom.querySelector('parsererror');
-  if (parseError) {
-    throw new Error('invalidRSS'); /// invalidRSS
+const domParser = new DOMParser();
+
+export default (contents) => {
+  const xmlDocument = domParser.parseFromString(contents, 'text/xml');
+  const rootTagName = xmlDocument.documentElement.tagName.toLowerCase();
+  if (rootTagName !== 'rss') {
+    throw new Error('noRSS');
   }
-  const feed = {
-    title: dom.querySelector('title').textContent,
-    description: dom.querySelector('description').textContent,
-  };
-  const posts = Array
-    .from(dom.querySelectorAll('item'))
-    .map((item) => {
-      const title = item.querySelector('title').textContent;
-      const link = item.querySelector('link').textContent;
-      const description = item.querySelector('description').textContent;
-      return { title, link, description };
-    });
-  return { feed, posts };
+
+  const channel = xmlDocument.querySelector('channel');
+  const channelTitle = xmlDocument.querySelector('channel title').textContent;
+  const channelDescription = xmlDocument.querySelector('channel description').textContent;
+  const feed = { channelTitle, channelDescription };
+
+  const itemElements = channel.getElementsByTagName('item');
+  const posts = [...itemElements].map((item) => {
+    const title = item.querySelector('title').textContent;
+    const description = item.querySelector('description').textContent;
+    const link = item.querySelector('channel link').textContent;
+    return {
+      title,
+      description,
+      link,
+    };
+  });
+
+  const parsedRSS = { feed, posts };
+
+  return Promise.resolve(parsedRSS);
 };

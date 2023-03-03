@@ -14,6 +14,11 @@ const elements = {
   btn: document.querySelector('button[type="submit"]'),
   posts: document.querySelector('.posts'),
   feeds: document.querySelector('.feeds'),
+  modal: {
+    title: document.querySelector('.modal-title'),
+    body: document.querySelector('.modal-body'),
+    fullArticleButton: document.querySelector('.full-article'),
+  },
 };
 
 let counter = 0;
@@ -140,9 +145,15 @@ export default () => {
           });
       });
       elements.posts.addEventListener('click', (e) => {
-        const postId = e.target.dataset.id;
+        const postId = +e.target.dataset.id;
         if (postId) {
-          watchedState.readPostIds.add(+postId);
+          watchedState.readPostIds.add(postId);
+        }
+        if (e.target.dataset.bsTarget === '#modal') {
+          const post = state.posts
+            .find(({ id }) => postId === id);
+          const { title, description, link } = post;
+          watchedState.modal = { title, description, link };
         }
       });
     });

@@ -1,16 +1,27 @@
 export default {
   translation: {
-    feeds: 'Фиды',
-    posts: 'Посты',
-    preview: 'Просмотр',
-    rssAdded: 'RSS успешно загружен',
-    errors: {
-      rssAlreadyExists: 'RSS уже существует',
-      notValidURL: 'Ссылка должна быть валидным URL',
-      dataIsNotValid: 'введенные данные невалидны',
-      noRSS: 'Ресурс не содержит валидный RSS',
-      networkError: 'Ошибка сети',
-      default: 'Неизвестная ошибка. Что-то пошло не так',
+    inputForm: {
+      title: 'RSS агрегатор',
+      header: 'Начните читать RSS сегодня! Это легко, это красиво.',
+      url: 'Ссылка RSS',
+      placeholder_url: 'ссылка RSS',
+      addButton: 'Добавить',
+      exampleRSS: 'Пример: https://ru.hexlet.io/lessons.rss',
+      modalReadButton: 'Читать полностью',
+      modalCloseButton: 'Закрыть',
     },
+    errors: {
+      alreadyExists: 'RSS уже существует',
+      invalidURL: 'Ссылка должна быть валидным URL',
+      invalidRSS: 'Ресурс не содержит валидный RSS',
+      badNetwork: 'Ошибка сети',
+      emptyField: 'Не должно быть пустым',
+    },
+    feedForm: {
+      feeds: 'Фиды',
+      posts: 'Посты',
+      buttonRead: 'Просмотр',
+    },
+    successMessage: 'RSS успешно загружен',
   },
 };

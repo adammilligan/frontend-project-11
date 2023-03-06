@@ -1,7 +1,7 @@
 {
-  "name": "my-webpack-project",
+  "name": "RSS-aggregatorr",
   "version": "1.0.0",
-  "description": "My webpack project",
+  "description": "Start reading RSS right now! It's easy and nice",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

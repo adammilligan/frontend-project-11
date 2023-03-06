@@ -1,14 +1,27 @@
 export default {
-  feeds: 'Feeds',
-  posts: 'Posts',
-  preview: 'Preview',
-  rssAdded: 'RSS uploaded successfully',
-  errors: {
-    rssAlreadyExists: 'RSS already exists',
-    notValidURL: 'Link must be a valid URL',
-    dataIsNotValid: ' the entered data is not valid',
-    noRSS: 'The resource does not contain valid RSS',
-    networkError: 'Network error',
-    default: 'Unknown error. Something went wrong',
+  translation: {
+    inputForm: {
+      title: 'RSS aggregator',
+      header: 'Start reading RSS right now! It\'s easy and nice',
+      url: 'RSS link',
+      url_placeholder: 'link RSS',
+      addButton: 'Add',
+      exampleRSS: 'Example: https://ru.hexlet.io/lessons.rss',
+      modalReadButton: 'Read full',
+      modalCloseButton: 'Close',
+    },
+    errors: {
+      alreadyExists: 'Rss already exists',
+      invalidURL: 'The link must be a valid URL',
+      invalidRSS: 'The resource doesn\'t contains valid RSS',
+      badNetwork: 'Response Error',
+      emptyField: 'Fill the field',
+    },
+    feedForm: {
+      feeds: 'Feeds',
+      posts: 'Posts',
+      buttonRead: 'View',
+    },
+    successMessage: 'RSS downloaded successfully',
   },
 };

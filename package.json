@@ -1,5 +1,5 @@
 {
-  "name": "RSS-aggregatorr",
+  "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "Start reading RSS right now! It's easy and nice",
   "main": "index.js",

@@ -63,6 +63,12 @@ const sendingHandler = (elements) => {
 };
 
 const errorHandler = (elements, err, i18nInstance) => {
+  if (err === 'Network Error') {
+    elements.feedback.classList.remove('text-success');
+    elements.feedback.classList.add('text-danger');
+    elements.feedback.textContent = i18nInstance.t('errors.networkError');
+    return;
+  }
   elements.input.classList.add('is-invalid');
   elements.feedback.classList.remove('text-success');
   elements.feedback.classList.add('text-danger');

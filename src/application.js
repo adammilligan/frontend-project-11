@@ -137,7 +137,7 @@ export default () => {
           })
           .catch((err) => {
             watchedState.validation.state = 'invalid';
-            watchedState.validation.error = err.message;
+            watchedState.validation.error = err.message  ?? 'default';
             watchedState.processState = 'failed';
           })
           .finally(() => {

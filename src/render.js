@@ -2,17 +2,18 @@ import _ from 'lodash';
 
 const renderForm = (value, i18n, elements) => {
   const { feedback, inputField } = elements;
+
   switch (value) {
     case 'valid':
-      feedback.classList.add('text-danger');
-      feedback.classList.remove('text-success');
       inputField.classList.remove('is-invalid');
+      feedback.classList.remove('text-danger');
+      feedback.classList.remove('text-success');
       break;
     case 'invalid':
       inputField.classList.add('is-invalid');
+      feedback.classList.add('text-danger');
       break;
     case 'success':
-      feedback.classList.remove('text-danger');
       feedback.classList.add('text-success');
       break;
     default:
@@ -23,12 +24,12 @@ const renderForm = (value, i18n, elements) => {
 const renderLoadStatus = (state, value, i18n, elements) => {
   const { buttonSubmit, feedback, inputField } = elements;
   switch (value) {
-    case 'filling':
+    case 'idle':
       buttonSubmit.disabled = false;
       inputField.disabled = false;
       inputField.focus();
       break;
-    case 'processing':
+    case 'loading':
       buttonSubmit.disabled = true;
       inputField.disabled = true;
       feedback.textContent = '';
@@ -75,7 +76,7 @@ const renderFeeds = (state, i18n, elements) => {
     feedTitle.classList.add('h6', 'm-0');
     feedTitle.textContent = title;
     const feedDescription = document.createElement('p');
-    feedDescription.classList.add('m-0', 'small', 'text-balck-50');
+    feedDescription.classList.add('m-0', 'small', 'text-black-50');
     feedDescription.textContent = description;
     feedContainer.append(feedTitle);
     feedContainer.append(feedDescription);

@@ -85,9 +85,6 @@ const handleSubmitButtonEvent = (watchedState, elements) => {
       formState.status = 'invalid';
       dataLoadState.error = (err.name === 'AxiosError') ? 'badNetwork' : err.message;
       dataLoadState.status = 'failed';
-    })
-    .finally(() => {
-      dataLoadState.status = 'idle';
     });
 };
 

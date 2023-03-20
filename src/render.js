@@ -37,9 +37,15 @@ const renderLoadStatus = (state, value, i18n, elements) => {
     case 'finished':
       inputField.value = '';
       feedback.textContent = i18n.t('successMessage');
+      buttonSubmit.disabled = false;
+      inputField.disabled = false;
+      inputField.focus();
       break;
     case 'failed':
       feedback.textContent = i18n.t(`errors.${state.dataLoadState.error}`);
+      buttonSubmit.disabled = false;
+      inputField.disabled = false;
+      inputField.focus();
       break;
     default:
       throw new Error(`Unknown dataStatus:${value}`);

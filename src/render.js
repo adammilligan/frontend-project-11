@@ -140,7 +140,7 @@ export default (state, i18n, changedData, elements) => {
           renderLoadStatus(state, value, i18n, elements);
           break;
         default:
-          throw new Error(`Unhandled state:${value}`);
+          console.log('ошибка валидации');
       }
       break;
     }

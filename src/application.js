@@ -65,26 +65,26 @@ const updateRSS = (watchedState) => {
 };
 
 const handleSubmitButtonEvent = (watchedState, elements) => {
-  const { dataLoadState, formState, data } = watchedState;
+  const { formState, data } = watchedState;
   const formData = new FormData(elements.rssForm);
   const inputPath = formData.get('url');
   formState.status = 'valid';
-  dataLoadState.status = 'loading';
+  formState.loadingStatus = 'loading';
   validate(inputPath, watchedState)
     .then(({ url }) => axios.get(getLinkFormation(url)))
     .then((response) => {
       const { contents } = response.data;
       const parsedData = parseRSS(contents);
       formState.status = 'success';
-      dataLoadState.status = 'finished';
+      formState.loadingStatus = 'finished';
       const { feed, posts } = normalizeData(parsedData, inputPath);
       data.feeds = [...data.feeds, feed];
       data.posts = [...data.posts, ...posts];
     })
     .catch((err) => {
       formState.status = 'invalid';
-      dataLoadState.error = (err.name === 'AxiosError') ? 'badNetwork' : err.message;
-      dataLoadState.status = 'failed';
+      formState.loadingError = (err.name === 'AxiosError') ? 'badNetwork' : err.message;
+      formState.loadingStatus = 'failed';
     });
 };
 
@@ -104,12 +104,8 @@ export default () => {
     lng: defaultLanguage,
     formState: {
       status: 'valid',
-      // loadingStatus: 'idle',
-      // loadingError: '',
-    },
-    dataLoadState: {
-      status: 'idle',
-      error: '',
+      loadingStatus: 'idle',
+      loadingError: '',
     },
     data: {
       posts: [],

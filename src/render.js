@@ -1,9 +1,9 @@
 import _ from 'lodash';
 
-const renderForm = (value, i18n, elements) => {
+const renderForm = (status, i18n, elements) => {
   const { feedback, inputField } = elements;
 
-  switch (value) {
+  switch (status) {
     case 'valid':
       inputField.classList.remove('is-invalid');
       feedback.classList.remove('text-danger');
@@ -17,7 +17,7 @@ const renderForm = (value, i18n, elements) => {
       feedback.classList.add('text-success');
       break;
     default:
-      throw new Error(`Unknown formStatus:${value}`);
+      throw new Error(`Unknown formStatus:${status}`);
   }
 };
 
@@ -42,10 +42,9 @@ const renderLoadStatus = (state, value, i18n, elements) => {
       inputField.focus();
       break;
     case 'failed':
-      feedback.textContent = i18n.t(`errors.${state.dataLoadState.error}`);
+      feedback.textContent = i18n.t(`errors.${state.formState.loadingError}`);
       buttonSubmit.disabled = false;
       inputField.disabled = false;
-      inputField.focus();
       break;
     default:
       throw new Error(`Unknown dataStatus:${value}`);
@@ -132,12 +131,20 @@ export default (state, i18n, changedData, elements) => {
   const { fullPath, value } = changedData;
   const [section, item] = fullPath.split('.');
   switch (section) {
-    case 'formState':
-      renderForm(value, i18n, elements);
+    case 'formState': {
+      switch (item) {
+        case 'status':
+          renderForm(value, i18n, elements);
+          break;
+        case 'loadingStatus':
+          renderLoadStatus(state, value, i18n, elements);
+          break;
+        default:
+          throw new Error(`Unhandled state:${value}`);
+      }
       break;
-    case 'dataLoadState':
-      if (item === 'status') renderLoadStatus(state, value, i18n, elements);
-      break;
+    }
+
     case 'data':
       renderFeeds(state, i18n, elements);
       renderPosts(state, i18n, elements);

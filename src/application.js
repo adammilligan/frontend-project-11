@@ -14,15 +14,14 @@ const updateRSSInterval = 5000; // ms
 const setLocaleTexts = (elements, i18n) => {
   const { localeTextElements } = elements;
   localeTextElements.forEach((element) => {
-    const el = element;
-    const elName = el.dataset.translate;
+    const elName = element.dataset.translate;
     const dest = (elName === 'placeholder_url') ? 'placeholder' : 'textContent';
-    el[dest] = i18n.t(`inputForm.${elName}`);
+    element[dest] = i18n.t(`inputForm.${elName}`);
   });
 };
 
-const validate = (url, watchedState) => {
-  const allFeedUrls = watchedState.data.feeds.map((feed) => feed.url);
+const validate = (url, data) => {
+  const allFeedUrls = data.feeds.map((feed) => feed.url);
   const urlSchema = yup.string().url('invalidURL').notOneOf(allFeedUrls, 'alreadyExists').required('emptyField');
   const schema = yup.object().shape({ url: urlSchema });
   return schema.validate({ url });
@@ -35,22 +34,15 @@ const getLinkFormation = (url) => {
   return urlWithProxy.toString();
 };
 
-const getCurrentPosts = (data) => data.posts.map((post) => {
-  const { title, link, description } = post;
-  return { title, link, description };
-});
-
-const updateRSS = (watchedState) => {
+const updateRSS = (data) => {
   const callBack = () => {
-    const { data } = watchedState;
     const urls = data.feeds.map((feed) => feed.url);
     const feedPromises = urls.map((url, index) => axios
       .get(getLinkFormation(url))
       .then((response) => {
         const parsedData = parseRSS(response.data.contents);
-        const currentPosts = getCurrentPosts(data);
-        const newPosts = getUniquePosts(parsedData.posts, currentPosts);
-        const feedUrl = watchedState.data.feeds[index].url;
+        const newPosts = getUniquePosts(parsedData.posts, data);
+        const feedUrl = data.feeds[index].url;
         const { posts } = normalizeData({ feed: parsedData.feed, posts: newPosts }, feedUrl);
         if (posts.length > 0) {
           data.posts = [...posts, ...data.posts];
@@ -64,13 +56,12 @@ const updateRSS = (watchedState) => {
   callBack();
 };
 
-const handleSubmitButtonEvent = (watchedState, elements) => {
-  const { formState, data } = watchedState;
+const handleSubmitButtonEvent = (formState, data, elements) => {
   const formData = new FormData(elements.rssForm);
   const inputPath = formData.get('url');
   formState.status = 'valid';
   formState.loadingStatus = 'loading';
-  validate(inputPath, watchedState)
+  validate(inputPath, data)
     .then(({ url }) => axios.get(getLinkFormation(url)))
     .then((response) => {
       const { contents } = response.data;
@@ -88,9 +79,8 @@ const handleSubmitButtonEvent = (watchedState, elements) => {
     });
 };
 
-const handlePostButtonEvent = (watchedState, elements, e) => {
+const handlePostButtonEvent = (uiState, elements, e) => {
   const { id } = e.target.dataset ?? {};
-  const { uiState } = watchedState;
   if (id) {
     uiState.viewedPostsID.add(id);
   }
@@ -145,15 +135,16 @@ export default () => {
 
       elements.rssForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        handleSubmitButtonEvent(watchedState, elements);
+        console.log(state);
+        handleSubmitButtonEvent(watchedState.formState, watchedState.data, elements);
       });
       elements.postsContainer.addEventListener('click', (e) => {
-        handlePostButtonEvent(watchedState, elements, e);
+        handlePostButtonEvent(watchedState.uiState, elements, e);
       });
       elements.langChangeButton.addEventListener('change', (e) => {
         watchedState.lng = e.target.defaultValue ?? 'ru';
         setLocaleTexts(elements, i18n);
       });
-      updateRSS(watchedState);
+      updateRSS(watchedState.data);
     });
 };

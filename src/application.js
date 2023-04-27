@@ -135,7 +135,6 @@ export default () => {
 
       elements.rssForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        console.log(state);
         handleSubmitButtonEvent(watchedState.formState, watchedState.data, elements);
       });
       elements.postsContainer.addEventListener('click', (e) => {
